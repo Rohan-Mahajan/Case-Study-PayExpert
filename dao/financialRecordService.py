@@ -71,7 +71,7 @@ class FinancialRecordService(IFinancialRecordService):
     def get_financial_records_for_date(self, record_date):
         try:
             cursor = self.connection.cursor()
-            cursor.execute("select * from financialRecord where recordDate = ?", (record_date,))
+            cursor.execute("select * from financialRecord where reccordDate = ?", (record_date,))
             rows = cursor.fetchall()
 
             records = [FinancialRecord(*row) for row in rows]
