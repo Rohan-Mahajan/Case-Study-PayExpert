@@ -29,5 +29,3 @@ The following SQL tables are used in this project:
 
 4. **FinancialRecord Table**  
    - Tracks income and expenses, categorized by record type.
-
-## Folder Structure﻿# Case-Study-PayExpert
