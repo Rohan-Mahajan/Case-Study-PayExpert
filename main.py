@@ -47,7 +47,7 @@ class PayrollManagementSystem:
             print("17. Get Financial Records for Date")
             print("18. Exit")
 
-            choice = input("Select an option: ")
+            choice = input(f"Select an option: \n")
 
             if choice == '1':
                 self.add_employee()

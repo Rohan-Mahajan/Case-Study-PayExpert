@@ -54,8 +54,8 @@ class EmployeeService(IEmployeeService):
 
             cursor = self.connection.cursor()
             cursor.execute("""
-                insert into employee (employeeId, firstName, lastName, dateOfBirth, gender, email, phoneNumber, address, position, joiningDate)
-                value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                insert into employee (firstName, lastName, dateOfBirth, gender, email, phoneNumber, address, position, joiningDate)
+                values (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, employee_data)
             self.connection.commit()
             return True
