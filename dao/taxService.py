@@ -20,17 +20,26 @@ class TaxService(ITaxService):
             # Business logic to calculate tax
             taxable_income = 60000  # Example value
             tax_amount = taxable_income * 0.2  # 20% tax rate
-
+    
+            # Print the calculated tax details
+            print(f"Employee ID: {employee_id}")
+            print(f"Tax Year: {tax_year}")
+            print(f"Taxable Income: {taxable_income}")
+            print(f"Tax Amount (20%): {tax_amount}")
+    
             cursor = self.connection.cursor()
             cursor.execute("""
-                insert into tax (employeeID, taxYear, taxableIncome, taxAmount)
-                values (?, ?, ?, ?)
+                INSERT INTO tax (employeeID, taxYear, taxableIncome, taxAmount)
+                VALUES (?, ?, ?, ?)
             """, (employee_id, tax_year, taxable_income, tax_amount))
             self.connection.commit()
+    
             return True
+    
         except Exception as e:
             print(f"Error while calculating tax: {e}")
             raise TaxCalculationException("Error in tax calculation")
+
 
     def get_tax_by_id(self, tax_id):
         try:
@@ -73,9 +82,4 @@ class TaxService(ITaxService):
             print(f"Error while fetching taxes for year {tax_year}: {e}")
             return []
         
-    def calculate_tax(self, tax_year, taxable_income):
-        # Example logic for calculating tax
-        if taxable_income > 50000:  # Assuming this logic for high income
-            return 0.1 * taxable_income  # 10% tax
-        else:
-            return 0.05 * taxable_income  # 5% tax
+    

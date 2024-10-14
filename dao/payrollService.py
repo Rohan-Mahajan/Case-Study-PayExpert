@@ -16,21 +16,14 @@ class PayrollService(IPayrollService):
             print(f"Error: {e}")
             raise
 
-    def generate_payroll(self, payroll:Payroll):
+    def generate_payroll(self, payroll_data):
         try:
             # Business logic can be expanded here
             cursor = self.connection.cursor()
             cursor.execute("""
-                insert into payroll (employeeID, payPeriodStartDate, payPeriodEndDate, basicSalary, overTimePay, deductions)
-                values (?, ?, ?, ?, ?, ?)
-            """, (payroll.employee_id, 
-                  payroll.payPeriodStartDate, 
-                  payroll.payPeriodEndDate,
-                  payroll.basicSalary,
-                  payroll.overTimePay,
-                  payroll.deductions
-                  )
-            )  
+                INSERT INTO payroll (employeeID, payPeriodStartDate, payPeriodEndDate, basicSalary, overTimePay, deductions)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, payroll_data)  
             self.connection.commit()
             return True
         except Exception as e:

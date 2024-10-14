@@ -65,17 +65,54 @@ class EmployeeService(IEmployeeService):
         except Exception as e:
             print(f"Error while adding employee: {e}")
             return False
-
+        
     def update_employee(self, employee_data):
         try:
-            if not employee_data[-1]:  # Assuming last field is EmployeeID
+            if not employee_data.get('employee_id'):
                 raise InvalidInputException("EmployeeID is required for updating an employee.")
-
+    
+            set_clause = []
+            parameters = []
+    
+            # Build SET clause dynamically based on provided data
+            if employee_data['first_name']:
+                set_clause.append("firstName = ?")
+                parameters.append(employee_data['first_name'])
+            if employee_data['last_name']:
+                set_clause.append("lastName = ?")
+                parameters.append(employee_data['last_name'])
+            if employee_data['dob']:
+                set_clause.append("dateOfBirth = ?")
+                parameters.append(employee_data['dob'])
+            if employee_data['gender']:
+                set_clause.append("gender = ?")
+                parameters.append(employee_data['gender'])
+            if employee_data['email']:
+                set_clause.append("email = ?")
+                parameters.append(employee_data['email'])
+            if employee_data['phone']:
+                set_clause.append("phoneNumber = ?")
+                parameters.append(employee_data['phone'])
+            if employee_data['address']:
+                set_clause.append("address = ?")
+                parameters.append(employee_data['address'])
+            if employee_data['position']:
+                set_clause.append("position = ?")
+                parameters.append(employee_data['position'])
+            if employee_data['joining_date']:
+                set_clause.append("joiningDate = ?")
+                parameters.append(employee_data['joining_date'])
+    
+            # Add the employee ID to the end of parameters list
+            parameters.append(employee_data['employee_id'])
+    
             cursor = self.connection.cursor()
-            cursor.execute("""
-                update employee set firstName = ?, lastName = ?, dateOfBirth = ?, gender = ?, email = ?, phoneNumber = ?, address = ?, position = ?, joiningDate = ?
-                where employeeID = ?
-            """, employee_data)
+            cursor.execute(f"""
+                UPDATE employee 
+                SET {', '.join(set_clause)} 
+                WHERE employeeID = ?
+            """, parameters)
+            
             self.connection.commit()
             return True
         except InvalidInputException as e:
@@ -84,7 +121,7 @@ class EmployeeService(IEmployeeService):
         except Exception as e:
             print(f"Error while updating employee: {e}")
             return False
-
+    
     def remove_employee(self, employee_id):
         try:
             cursor = self.connection.cursor()

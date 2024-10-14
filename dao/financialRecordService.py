@@ -17,18 +17,21 @@ class FinancialRecordService(IFinancialRecordService):
             print(f"Error: {e}")
             raise
 
-    def add_financial_record(self, employee_id, description, amount, record_type):
+    def add_financial_record(self, financial_data):
         try:
-            if not employee_id or not description or not amount or not record_type:
+            # Validate inputs
+            if not all(financial_data):
                 raise InvalidInputException("All fields are required for financial record.")
-
+    
+            # Insert record into the financialRecord table
             cursor = self.connection.cursor()
             cursor.execute("""
-                insert into financialRecord (employeeID, recordDate, description, amount, recordType)
-                values (?, getdate(), ?, ?, ?)
-            """, (employee_id, description, amount, record_type))
+                INSERT INTO financialRecord (employeeID, reccordDate, description, amount, recordType) 
+                VALUES (?, ?, ?, ?, ?)
+            """, financial_data)
             self.connection.commit()
             return True
+    
         except InvalidInputException as e:
             print(f"Invalid input: {e}")
             return False
